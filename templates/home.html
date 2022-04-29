@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="https://i.imgur.com/NN9GJqv.png">
+        <title>Gallery</title>
+        {% load static %}
+        <!-- CSS only -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+              crossorigin="anonymous">
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand">Wikipedia Article Translation Contributor</a>
+            <form class="form-inline">
+                <a href="{% url 'dashboard' %}"
+                   class="btn btn-outline-dark my-2 my-sm-0 mr-3">Dashboard</a>
+                <a href="{% url 'logout' %}"
+                   class="btn btn-outline-danger my-2 my-sm-0 mr-3">Logout</a>
+            </form>
+        </nav>
+        <div class="container">
+            <!-- code here -->
+            <div class="card">
+                <div class="card-image">
+                    <h2 class="card-heading">
+                        Get started
+                        <small>Translate the
+                            <br>
+                            page in the
+                            <br>
+                            language of your
+                            <br>
+                        choice.</small>
+                    </h2>
+                </div>
+                <form class="card-form" method="post" action="/dashboard">
+                    {% csrf_token %}
+                    <div class="input">
+                        <input type="text"
+                               name="link"
+                               class="input-field"
+                               placeholder="Wikipedia Article Name"
+                               required/>
+                    </div>
+                    <div class="input">
+                        <select name="language" id="language" required>
+                            <option disabled="true">
+                                --Select Language--
+                            </option>
+                            <option value="Bengali">
+                                Bengali (bn)
+                            </option>
+                            <option value="Gujarati">
+                                Gujarati (gu)
+                            </option>
+                            <option value="Hindi">
+                                Hindi (hi)
+                            </option>
+                            <option value="Kannada">
+                                Kannada (kn)
+                            </option>
+                            <option value="Malayalam">
+                                Malayalam (ml)
+                            </option>
+                            <option value="Marathi">
+                                Marathi (mr)
+                            </option>
+                            <option value="Nepali">
+                                Nepali (ne)
+                            </option>
+                            <option value="Oriya">
+                                Oriya (or)
+                            </option>
+                            <option value="Panjabi">
+                                Panjabi (pa)
+                            </option>
+                            <option value="Sinhala">
+                                Sinhala (si)
+                            </option>
+                            <option value="Tamil">
+                                Tamil (ta)
+                            </option>
+                            <option value="Telugu">
+                                Telugu (te)
+                            </option>
+                            <option value="Urdu">
+                                Urdu (ur)
+                            </option>
+                        </select>
+                    </div>
+                    <div class="action">
+                        <button class="action-button">Convert Now</button>
+                    </div>
+                </form>
+                <div class="card-info">
+                    <div class="container px-4 px-lg-5">Made with &#10084; by Aneesh</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

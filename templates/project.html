@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Project</title>
+        {% load static %}
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel="icon" type="image/x-icon" href="https://i.imgur.com/NN9GJqv.png">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+              crossorigin="anonymous">
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand">Project Id {{ project.number }} - {{ project.link }}</a>
+            <form class="form-inline">
+                <a href="{% url 'dashboard' %}"
+                   class="btn btn-outline-dark my-2 my-sm-0 mr-3">Dashboard</a>
+                <a href="{% url 'logout' %}"
+                   class="btn btn-outline-danger my-2 my-sm-0 mr-3">Logout</a>
+            </form>
+        </nav>
+        <br>
+        <br>
+        <form class="form-signin" method="post" action="/login">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    {% for sentence in sentences %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    {{ sentence.original }}
+                                </p>
+                                <hr>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text"
+                                       id="translated"
+                                       name="translated"
+                                       class="form-control"
+                                       placeholder="Type your translation here"
+                                       required>
+                                <hr>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <h3>No sentences...</h3>
+                    {% endfor %}
+                </div>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Translations</button>
+        </form>
+    </body>
+</html>
