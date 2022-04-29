@@ -60,7 +60,21 @@ def home(request):
 
 
 def process(request):
-    return render(request, "404.html")
+    user = request.user
+    
+
+    if request.method == "POST":
+        project_number = request.POST.get("project_number")
+        sentence = Sentence.objects.filter(number=project_number)
+        count_sentence = Sentence.objects.filter(number=project_number).count()
+        for _ in range(count_sentence):
+            translated = request.POST.get(sentence.sentence_id)
+            Sentence.objects.filter(number=project_number).update(translated=translated)
+        print(project_number)
+    
+    projects = Project.objects.filter(user=user)
+    context = {"projects": projects}
+    return render(request, "dashboard.html",context)
 
 
 def dashboard(request):
@@ -78,8 +92,10 @@ def dashboard(request):
 
         try:
             text = wikipedia.summary(link)
+            print(text)
         except wikipedia.exceptions.DisambiguationError as e:
             s = random.choice(e.options)
+            print(s)
             text = wikipedia.summary(s)
 
         seg = pysbd.Segmenter(language="en", clean=False)
@@ -87,7 +103,7 @@ def dashboard(request):
         for sline in sentence_list:
             sent_id = Project.objects.filter(user=user).count()
             sent_id += 1
-            sentence = sentence.objects.create(
+            sentence = Sentence.objects.create(
                 user=user,
                 number=project,
                 sentence_id=sent_id,
