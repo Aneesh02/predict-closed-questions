@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
+django_heroku.settings(locals())
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ SECRET_KEY = "django-insecure-vhtfyvh$i#a(o(krk_2d4&&p9y6l#-90suldz3f#w-5rcyt$@e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["wikipedia-article-translation.herokuapp.com"]
+ALLOWED_HOSTS = ["wikipedia-article-translation.herokuapp.com","0.0.0.0"]
 
 
 # Application definition
@@ -131,3 +134,7 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = BASE_DIR / "static/images"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
