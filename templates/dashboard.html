@@ -17,37 +17,33 @@
                 <div class="col-md-3">
                     <div style="height: 90vh;">
                         <h2>
-                            Hello <strong>{{ request.user }}</strong>
+                            Hello <strong>User</strong>
                         </h2>
+                        <a href="{% url 'home' %}" class="btn btn-dark my-3">Check a New Question</a>
                         <br>
-                        <a href="{% url 'home' %}" class="btn btn-dark my-3">Convert More</a>
                     </div>
                 </div>
                 <div class="col-md-9">
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th scope="col">Project Id</th>
-                                <th scope="col">Article Title</th>
-                                <th scope="col">Converting To</th>
-                                <th scope="col">Link</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">Platform</th>
+                                <th scope="col">Model Used</th>
+                                <th scope="col">Question Fate</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for project in projects %}
-                                <tr>
-                                    <th scope="row">{{ project.number }}</th>
-                                    <td>{{ project.link }}</td>
-                                    <td>{{ project.language }}</td>
-                                    <td>
-                                        <a href="project/{{ project.id }}/">Link</a>
-                                    </td>
-                                </tr>
-                            {% empty %}
-                                <h3>No projects...</h3><br>
-                            {% endfor %}
+                        <tbody> 
+                            <tr>
+                                <th scope="row">{{ question }}</th>
+                                <td>{{ platform }}</td>
+                                <td>{{ model }}</td>
+                                <td>{{ ans_catog }}</td>
+                            </tr>
+                            
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

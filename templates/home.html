@@ -21,13 +21,8 @@
     </head>
     <body>
         <nav class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand">Wikipedia Article Translation Contributor</a>
-            <form class="form-inline">
-                <a href="{% url 'dashboard' %}"
-                   class="btn btn-outline-dark my-2 my-sm-0 mr-3">Dashboard</a>
-                <a href="{% url 'logout' %}"
-                   class="btn btn-outline-danger my-2 my-sm-0 mr-3">Logout</a>
-            </form>
+            <a class="navbar-brand">Foretelling Fate in Forums </a>
+            
         </nav>
         <div class="container">
             <!-- code here -->
@@ -35,76 +30,71 @@
                 <div class="card-image">
                     <h2 class="card-heading">
                         Get started
-                        <small>Translate the
+                        <small>Get to 
                             <br>
-                            page in the
+                            know the
                             <br>
-                            language of your
+                            chances of 
                             <br>
-                        choice.</small>
+                            this question<br>
+                            being closed.</small>
                     </h2>
                 </div>
                 <form class="card-form" method="post" action="/dashboard">
                     {% csrf_token %}
                     <div class="input">
                         <input type="text"
-                               name="link"
+                               name="question"
                                class="input-field"
-                               placeholder="Wikipedia Article Name"
+                               placeholder="Question"
                                required/>
                     </div>
                     <div class="input">
-                        <select name="language" id="language" required>
+                        <select name="platform" id="platform" required>
                             <option disabled="true">
-                                --Select Language--
+                                --Select Platform--
                             </option>
-                            <option value="Bengali">
-                                Bengali (bn)
+                            <option value="StackOverflow">
+                                StackOverflow
                             </option>
-                            <option value="Gujarati">
-                                Gujarati (gu)
+                            <option value="Quora">
+                                Quora
                             </option>
-                            <option value="Hindi">
-                                Hindi (hi)
-                            </option>
-                            <option value="Kannada">
-                                Kannada (kn)
-                            </option>
-                            <option value="Malayalam">
-                                Malayalam (ml)
-                            </option>
-                            <option value="Marathi">
-                                Marathi (mr)
-                            </option>
-                            <option value="Nepali">
-                                Nepali (ne)
-                            </option>
-                            <option value="Oriya">
-                                Oriya (or)
-                            </option>
-                            <option value="Panjabi">
-                                Panjabi (pa)
-                            </option>
-                            <option value="Sinhala">
-                                Sinhala (si)
-                            </option>
-                            <option value="Tamil">
-                                Tamil (ta)
-                            </option>
-                            <option value="Telugu">
-                                Telugu (te)
-                            </option>
-                            <option value="Urdu">
-                                Urdu (ur)
+                            <option value="Reddit">
+                                Reddit
                             </option>
                         </select>
                     </div>
+
+                    <div class="input">
+                        <select name="model" id="model" required>
+                            <option disabled="true">
+                                --Select Model--
+                            </option>
+                            <option value="Model1">
+                                Gaussian Naive Bayes
+                            </option>
+                            <option value="Model2">
+                                MLP Classifier
+                            </option>
+                            <option value="Model3">
+                                SVC Classifier
+                            </option>
+                            <option value="Model4">
+                                Random Forest Classifier
+                            </option>
+                            <option value="Model5">
+                                Quadratic Discriminant Analysis
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="action">
-                        <button class="action-button">Convert Now</button>
+                        <button class="action-button">Check Fate</button>
                     </div>
                 </form>
                 <div class="card-info">
-                    <div class="container px-4 px-lg-5">Made with &#10084; by Aneesh</div>
+                    <div class="container px-4 px-lg-5">Made with &#10084; by Group 1</div>
                 </div>
             </div>
         </div>

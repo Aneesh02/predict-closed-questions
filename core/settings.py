@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-vhtfyvh$i#a(o(krk_2d4&&p9y6l#-90suldz3f#w-5rcyt$@e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["wikipedia-article-translation.herokuapp.com","0.0.0.0"]
+ALLOWED_HOSTS = ["wikipedia-article-translation.herokuapp.com","0.0.0.0","127.0.0.1"]
 
 
 # Application definition

@@ -1,123 +1,73 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import logout, login
-from home.models import Project, Sentence
+from django.shortcuts import render
 import random
+import pandas as pd
+import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
+so_vectorizer = pickle.load(open("models/so_vectorizer.pickle", "rb"))
+red_vectorizer = pickle.load(open("models/red_vectorizer.pickle", "rb"))
+quora_vectorizer = pickle.load(open("models/quora_vectorizer.pickle", "rb"))
 
-# Wikipedia API
-import wikipedia
-
-# sentence segmentation
-import pysbd
-
+model1 = pickle.load(open("models/naive.sav", 'rb'))
+model2 = pickle.load(open("models/mlp.sav", 'rb'))
+model3 = pickle.load(open("models/svc.sav", 'rb'))
+model4 = pickle.load(open("models/rfc.sav", 'rb'))
+model5= pickle.load(open("models/qda.sav", 'rb'))
 
 # Create your views here.
 def landing(request):
-    return render(request, "landing.html")
-
-
-def loginUser(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("inputPassword")
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("/")
-        else:
-            context = {"error_message": "User does not exist"}
-            return render(request, "404.html", context)
-    return render(request, "login.html")
-
-
-def logoutUser(request):
-    logout(request)
-    return redirect("/landing")
-
-
-def registerUser(request):
-    if request.method == "POST":
-        username = request.POST.get("inputUsername")
-        password = request.POST.get("inputPassword")
-        if User.objects.filter(username=username).first():
-            context = {"error_message": "User already exists"}
-            return render(request, "404.html", context)
-        else:
-            user = User.objects.create_user(username, "", password)
-            user.save()
-            return redirect("/login")
-    else:
-        return render(request, "register.html")
-
-
-def home(request):
-    user = request.user
-    if user.is_anonymous:
-        return redirect("/landing")
-
     return render(request, "home.html")
 
-
-def process(request):
-    user = request.user
-    
-
-    if request.method == "POST":
-        project_number = request.POST.get("project_number")
-        sentence = Sentence.objects.filter(number=project_number)
-        count_sentence = Sentence.objects.filter(number=project_number).count()
-        for _ in range(count_sentence):
-            translated = request.POST.get(sentence.sentence_id)
-            Sentence.objects.filter(number=project_number).update(translated=translated)
-        print(project_number)
-    
-    projects = Project.objects.filter(user=user)
-    context = {"projects": projects}
-    return render(request, "dashboard.html",context)
-
+def home(request):
+     return render(request, "home.html")
 
 def dashboard(request):
-    user = request.user
-
     if request.method == "POST":
-        link = request.POST.get("link")
-        language = request.POST.get("language")
-        number = Project.objects.filter(user=user).count()
-        number += 1
-        project = Project.objects.create(
-            user=user, number=number, link=link, language=language
-        )
-        project.save()
+        question = request.POST.get("question")
+        platform = request.POST.get("platform")
+        model = request.POST.get("model")
+    
+    if platform=="StackOverflow":
+        ques_array = so_vectorizer.transform(pd.Series(question)).toarray()
+    elif platform=="Quora":
+        ques_array = quora_vectorizer.transform(pd.Series(question)).toarray()
+    elif platform=="Reddit":
+        ques_array = red_vectorizer.transform(pd.Series(question)).toarray()
 
-        try:
-            text = wikipedia.summary(link)
-            print(text)
-        except wikipedia.exceptions.DisambiguationError as e:
-            s = random.choice(e.options)
-            print(s)
-            text = wikipedia.summary(s)
-
-        seg = pysbd.Segmenter(language="en", clean=False)
-        sentence_list = seg.segment(text)
-        for sline in sentence_list:
-            sent_id = Project.objects.filter(user=user).count()
-            sent_id += 1
-            sentence = Sentence.objects.create(
-                user=user,
-                number=project,
-                sentence_id=sent_id,
-                original=sline,
-                translated="",
-            )
-            sentence.save()
-
-    projects = Project.objects.filter(user=user)
-    context = {"projects": projects}
-    return render(request, "dashboard.html", context)
+    models = {"Model1":"Gaussian Naive Bayes", "Model2":"MLP Classifier", "Model3":"SVC Classifier","Model4":"Random Forest Classifier", "Model5":"Quadratic Discriminant Analysis"}
+    categories = {0:'open', 1:'close'}
 
 
-def viewProject(request, pk):
-    project = Project.objects.get(id=pk)
-    sentences = Sentence.objects.filter(number=project)
-    return render(request, "project.html", {"project": project, "sentences": sentences})
+    if model =="Model1":
+        ans_cat = model1.predict(ques_array)
+        if ans_cat[0]!=0:
+            ans_cat[0]=1
+        final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+    elif model =="Model2":
+        ans_cat = model2.predict(ques_array)
+        if ans_cat[0]!=0:
+            ans_cat[0]=1
+        final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+    elif model =="Model3":
+        ans_cat = model3.predict(ques_array)
+        if ans_cat[0]!=0:
+            ans_cat[0]=1
+        final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+    elif model =="Model4":
+        ans_cat = model4.predict(ques_array)
+        if ans_cat[0]!=0:
+            ans_cat[0]=1
+        final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+    elif model =="Model5":
+        ans_cat = model5.predict(ques_array)
+        if ans_cat[0]!=0:
+            ans_cat[0]=1
+        final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+
+    context = {"question": question, "platform":platform ,"model":final_model, "ans_catog":final_ans}       
+    
+    return render(request, "dashboard.html",context)
