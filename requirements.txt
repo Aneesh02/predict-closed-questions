@@ -1,5 +1,5 @@
 asgiref==3.5.1
-backports.zoneinfo==0.2.1
+backports.zoneinfo==0.2.1;python_version<"3.9"
 bcrypt==3.1.7
 blinker==1.4
 click==8.1.3
