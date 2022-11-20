@@ -33,9 +33,9 @@ def dashboard(request):
     elif platform=="Reddit":
         ques_array = red_vectorizer.transform(pd.Series(question)).toarray()
 
-    models = {"Model1":"Gaussian Naive Bayes", "Model2":"MLP Classifier", "Model3":"SVC Classifier","Model4":"Random Forest Classifier", "Model5":"Quadratic Discriminant Analysis"}
+    models = {"Model1":"Gaussian Naive Bayes", "Model2":"MLP Classifier", "Model3":"SVC Classifier","Model4":"Random Forest Classifier", "Model5":"Quadratic Discriminant Analysis", "Ensemble1":"Ensemble 1","Ensemble2":"Ensemble 2"}
     categories = {0:'open', 1:'close'}
-
+    model_lst = [model1,model2,model3,model4,model5]
 
     if model =="Model1":
         ans_cat = model1.predict(ques_array)
@@ -66,6 +66,38 @@ def dashboard(request):
         if ans_cat[0]!=0:
             ans_cat[0]=1
         final_ans = categories[ans_cat[0]]
+        final_model = models[model]
+
+    elif model =="Ensemble1":        # simple max voting
+        ans_cat_lst = []
+        for model in model_lst:
+            ans_cat = model1.predict(ques_array)
+            if ans_cat[0]!=0:
+                ans_cat[0]=1
+            ans_cat_lst.append(ans_cat)
+
+        ans_cat_final = max(set(ans_cat_lst), key = ans_cat_lst.count)
+        final_ans = categories[ans_cat_final]
+        final_model = models[model]
+
+    
+    elif model =="Ensemble2":          # weighted sum voting
+        wts = [1,0,0,0,0]            # sum should be 1
+        ans_cat_lst = []
+        wt_cnt = 0
+        for model in model_lst:
+            ans_cat = model1.predict(ques_array)
+            if ans_cat[0]!=0:
+                ans_cat[0]=1
+            ans_cat = ans_cat*wts[wt_cnt]
+            wt_cnt+=1
+            ans_cat_lst.append(ans_cat)
+
+        ans_cat_final = sum(ans_cat_lst)
+        if ans_cat_final >= 0.5:
+            final_ans = "close"
+        else:
+            final_ans = "open"
         final_model = models[model]
 
     context = {"question": question, "platform":platform ,"model":final_model, "ans_catog":final_ans}       
