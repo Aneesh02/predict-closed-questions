@@ -74,6 +74,7 @@ def dashboard(request):
         ans_cat_lst = []
         for model in model_lst:
             ans_cat = model1.predict(ques_array)
+            ans_cat = ans_cat.tolist()
             if ans_cat[0]!=0:
                 ans_cat[0]=1
             ans_cat_lst.append(ans_cat)
@@ -89,6 +90,7 @@ def dashboard(request):
         wt_cnt = 0
         for model in model_lst:
             ans_cat = model1.predict(ques_array)
+            ans_cat = ans_cat.tolist()
             if ans_cat[0]!=0:
                 ans_cat[0]=1
             ans_cat = ans_cat*wts[wt_cnt]
