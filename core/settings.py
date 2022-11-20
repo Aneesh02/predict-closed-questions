@@ -138,3 +138,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
     DATABASES = {'default': dj_database_url.config()}
+
+CSRF_TRUSTED_ORIGINS = ['https://fate-of-question.herokuapp.com']
