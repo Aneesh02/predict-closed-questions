@@ -72,30 +72,29 @@ def dashboard(request):
 
     elif model =="Ensemble1":        # simple max voting
         ans_cat_lst = []
-        for model in model_lst:
-            ans_cat = model1.predict(ques_array)
+        for model_check in model_lst:
+            ans_cat = model_check.predict(ques_array)
             ans_cat = ans_cat.tolist()
             if ans_cat[0]!=0:
                 ans_cat[0]=1
-            ans_cat_lst.append(ans_cat)
-
+            ans_cat_lst.append(ans_cat[0])
         ans_cat_final = mode(ans_cat_lst)
         final_ans = categories[ans_cat_final]
         final_model = models[model]
 
     
     elif model =="Ensemble2":          # weighted sum voting
-        wts = [1,0,0,0,0]            # sum should be 1
+        wts = [0.8,0.2,0,0,0]            # sum should be 1
         ans_cat_lst = []
         wt_cnt = 0
-        for model in model_lst:
-            ans_cat = model1.predict(ques_array)
+        for model_check in model_lst:
+            ans_cat = model_check.predict(ques_array)
             ans_cat = ans_cat.tolist()
             if ans_cat[0]!=0:
                 ans_cat[0]=1
-            ans_cat = ans_cat*wts[wt_cnt]
+            ans_cat[0] = ans_cat[0]*wts[wt_cnt]
             wt_cnt+=1
-            ans_cat_lst.append(ans_cat)
+            ans_cat_lst.append(ans_cat[0])
 
         ans_cat_final = sum(ans_cat_lst)
         if ans_cat_final >= 0.5:
