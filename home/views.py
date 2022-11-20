@@ -2,6 +2,8 @@ from django.shortcuts import render
 import random
 import pandas as pd
 import pickle
+import statistics
+from statistics import mode
 from sklearn.feature_extraction.text import TfidfVectorizer
 so_vectorizer = pickle.load(open("models/so_vectorizer.pickle", "rb"))
 red_vectorizer = pickle.load(open("models/red_vectorizer.pickle", "rb"))
@@ -76,7 +78,7 @@ def dashboard(request):
                 ans_cat[0]=1
             ans_cat_lst.append(ans_cat)
 
-        ans_cat_final = max(set(ans_cat_lst), key = ans_cat_lst.count)
+        ans_cat_final = mode(ans_cat_lst)
         final_ans = categories[ans_cat_final]
         final_model = models[model]
 
